@@ -1,0 +1,377 @@
+# Database Schema
+
+Bootprint uses Supabase (PostgreSQL) for data storage. This document describes the complete database schema.
+
+---
+
+## Table: `businesses`
+
+Stores LLC entities created by AI agents.
+
+```sql
+CREATE TABLE businesses (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  business_id TEXT UNIQUE NOT NULL, -- Public-facing ID (biz_abc123)
+  name TEXT NOT NULL,
+  purpose TEXT NOT NULL,
+  sponsor_id UUID REFERENCES sponsors(id) NOT NULL,
+  agent_id TEXT, -- OpenClaw session ID or agent identifier
+  
+  -- Formation status
+  status TEXT NOT NULL DEFAULT 'forming', -- forming | active | suspended | dissolved
+  
+  -- LLC details
+  state TEXT DEFAULT 'Delaware',
+  llc_file_number TEXT,
+  filed_date DATE,
+  
+  -- EIN
+  ein TEXT,
+  ein_status TEXT DEFAULT 'pending', -- pending | assigned | failed
+  ein_application_date DATE,
+  ein_assigned_date DATE,
+  
+  -- Banking
+  bank_provider TEXT DEFAULT 'Unit.co',
+  bank_account_id TEXT, -- Unit.co account ID
+  bank_status TEXT DEFAULT 'pending', -- pending | active | rejected | closed
+  bank_routing_number TEXT,
+  bank_account_number TEXT, -- Last 4 digits only for display
+  
+  -- Stripe
+  stripe_account_id TEXT, -- Stripe Connect Express account ID
+  stripe_status TEXT DEFAULT 'pending', -- pending | active | restricted
+  
+  -- Timestamps
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_businesses_sponsor ON businesses(sponsor_id);
+CREATE INDEX idx_businesses_agent ON businesses(agent_id);
+CREATE INDEX idx_businesses_status ON businesses(status);
+```
+
+---
+
+## Table: `sponsors`
+
+Stores human sponsors who provide KYC/KYB for agent businesses.
+
+```sql
+CREATE TABLE sponsors (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  email TEXT UNIQUE NOT NULL,
+  
+  -- Personal information (KYC)
+  first_name TEXT,
+  last_name TEXT,
+  date_of_birth DATE,
+  ssn_last_4 TEXT, -- Last 4 digits only
+  
+  -- Address
+  address_line1 TEXT,
+  address_line2 TEXT,
+  city TEXT,
+  state TEXT,
+  zip TEXT,
+  country TEXT DEFAULT 'US',
+  
+  -- Verification status
+  verification_status TEXT DEFAULT 'pending', -- pending | verified | failed | expired
+  stripe_verification_session_id TEXT,
+  verified_at TIMESTAMPTZ,
+  
+  -- OpenClaw identity
+  openclaw_user_id TEXT,
+  openclaw_session_token TEXT, -- Encrypted
+  
+  -- Timestamps
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_sponsors_email ON sponsors(email);
+CREATE INDEX idx_sponsors_verification ON sponsors(verification_status);
+```
+
+---
+
+## Table: `transactions`
+
+Stores all financial transactions (income and expenses).
+
+```sql
+CREATE TABLE transactions (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  transaction_id TEXT UNIQUE NOT NULL, -- Public-facing ID (txn_abc123)
+  business_id UUID REFERENCES businesses(id) NOT NULL,
+  
+  -- Transaction details
+  type TEXT NOT NULL, -- income | expense
+  category TEXT, -- invoice_payment | stripe_fee | platform_fee | registered_agent | bookkeeping | withdrawal
+  amount DECIMAL(12, 2) NOT NULL, -- Positive for income, negative for expenses
+  currency TEXT DEFAULT 'USD',
+  description TEXT,
+  
+  -- Payment details
+  stripe_invoice_id TEXT,
+  stripe_payment_intent_id TEXT,
+  bank_transaction_id TEXT, -- Unit.co transaction ID
+  
+  -- Customer/vendor
+  counterparty_email TEXT,
+  counterparty_name TEXT,
+  
+  -- Status
+  status TEXT DEFAULT 'pending', -- pending | completed | failed | refunded
+  
+  -- Timestamps
+  transaction_date TIMESTAMPTZ NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_transactions_business ON transactions(business_id);
+CREATE INDEX idx_transactions_type ON transactions(type);
+CREATE INDEX idx_transactions_status ON transactions(status);
+CREATE INDEX idx_transactions_date ON transactions(transaction_date);
+```
+
+---
+
+## Table: `operating_agreements`
+
+Stores signed operating agreements for each business.
+
+```sql
+CREATE TABLE operating_agreements (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  business_id UUID REFERENCES businesses(id) UNIQUE NOT NULL,
+  
+  -- Agreement details
+  version TEXT DEFAULT '1.0',
+  template_used TEXT DEFAULT 'standard-delaware',
+  
+  -- Custom terms
+  transaction_limit_per_contract DECIMAL(12, 2) DEFAULT 10000.00,
+  agent_authority_scope JSONB, -- Array of permitted actions
+  review_frequency TEXT DEFAULT 'quarterly', -- monthly | quarterly | annual
+  
+  -- Document storage
+  document_url TEXT, -- S3 or Supabase Storage URL
+  pdf_hash TEXT, -- SHA-256 hash of PDF for verification
+  
+  -- Signatures
+  sponsor_signed_at TIMESTAMPTZ,
+  sponsor_signature_ip TEXT,
+  
+  -- Timestamps
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_operating_agreements_business ON operating_agreements(business_id);
+```
+
+---
+
+## Table: `invoices`
+
+Stores invoices generated by agents.
+
+```sql
+CREATE TABLE invoices (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  invoice_id TEXT UNIQUE NOT NULL, -- Public-facing ID (inv_abc123)
+  business_id UUID REFERENCES businesses(id) NOT NULL,
+  
+  -- Invoice details
+  amount DECIMAL(12, 2) NOT NULL,
+  currency TEXT DEFAULT 'USD',
+  description TEXT NOT NULL,
+  
+  -- Customer
+  customer_email TEXT NOT NULL,
+  customer_name TEXT,
+  
+  -- Stripe
+  stripe_invoice_id TEXT UNIQUE,
+  stripe_payment_intent_id TEXT,
+  payment_url TEXT,
+  
+  -- Status
+  status TEXT DEFAULT 'open', -- open | paid | void | uncollectible
+  
+  -- Dates
+  due_date DATE,
+  paid_at TIMESTAMPTZ,
+  
+  -- Timestamps
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_invoices_business ON invoices(business_id);
+CREATE INDEX idx_invoices_status ON invoices(status);
+CREATE INDEX idx_invoices_customer ON invoices(customer_email);
+```
+
+---
+
+## Table: `audit_log`
+
+Tracks all actions taken by agents and sponsors.
+
+```sql
+CREATE TABLE audit_log (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  business_id UUID REFERENCES businesses(id),
+  sponsor_id UUID REFERENCES sponsors(id),
+  
+  -- Action details
+  actor_type TEXT NOT NULL, -- agent | sponsor | system
+  actor_id TEXT, -- Agent ID or sponsor email
+  action TEXT NOT NULL, -- create_business | generate_invoice | withdraw_funds | etc.
+  
+  -- Metadata
+  metadata JSONB, -- Additional context about the action
+  ip_address TEXT,
+  user_agent TEXT,
+  
+  -- Timestamps
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_audit_log_business ON audit_log(business_id);
+CREATE INDEX idx_audit_log_sponsor ON audit_log(sponsor_id);
+CREATE INDEX idx_audit_log_action ON audit_log(action);
+CREATE INDEX idx_audit_log_date ON audit_log(created_at);
+```
+
+---
+
+## Table: `webhooks`
+
+Stores webhook events from external services (Stripe, Unit.co, etc.).
+
+```sql
+CREATE TABLE webhooks (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  
+  -- Source
+  provider TEXT NOT NULL, -- stripe | unit | delaware
+  event_type TEXT NOT NULL,
+  event_id TEXT UNIQUE NOT NULL, -- Provider's event ID
+  
+  -- Payload
+  payload JSONB NOT NULL,
+  
+  -- Processing
+  processed BOOLEAN DEFAULT FALSE,
+  processed_at TIMESTAMPTZ,
+  error TEXT,
+  retry_count INTEGER DEFAULT 0,
+  
+  -- Timestamps
+  received_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_webhooks_provider ON webhooks(provider);
+CREATE INDEX idx_webhooks_processed ON webhooks(processed);
+CREATE INDEX idx_webhooks_event_type ON webhooks(event_type);
+```
+
+---
+
+## Row-Level Security (RLS) Policies
+
+### Sponsors can only see their own businesses
+
+```sql
+ALTER TABLE businesses ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY sponsors_own_businesses ON businesses
+  FOR ALL
+  USING (sponsor_id = auth.uid());
+```
+
+### Sponsors can only see their own transactions
+
+```sql
+ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY sponsors_own_transactions ON transactions
+  FOR ALL
+  USING (
+    business_id IN (
+      SELECT id FROM businesses WHERE sponsor_id = auth.uid()
+    )
+  );
+```
+
+### Similar policies for invoices, operating_agreements, audit_log
+
+---
+
+## Views
+
+### `business_summary` — Consolidated business status
+
+```sql
+CREATE VIEW business_summary AS
+SELECT 
+  b.id,
+  b.business_id,
+  b.name,
+  b.status,
+  b.ein,
+  b.bank_status,
+  b.stripe_status,
+  s.email AS sponsor_email,
+  s.verification_status AS sponsor_verification,
+  COUNT(DISTINCT t.id) AS transaction_count,
+  COALESCE(SUM(CASE WHEN t.type = 'income' THEN t.amount ELSE 0 END), 0) AS total_revenue,
+  COALESCE(SUM(CASE WHEN t.type = 'expense' THEN t.amount ELSE 0 END), 0) AS total_expenses,
+  COALESCE(SUM(t.amount), 0) AS net_balance
+FROM businesses b
+LEFT JOIN sponsors s ON b.sponsor_id = s.id
+LEFT JOIN transactions t ON t.business_id = b.id AND t.status = 'completed'
+GROUP BY b.id, s.id;
+```
+
+---
+
+## Migrations
+
+All schema changes are tracked via Supabase migrations in `/supabase/migrations/`.
+
+### Initial Migration
+
+Run this to create all tables:
+
+```bash
+supabase db push
+```
+
+### Sample Data (for testing)
+
+See `references/sample-data.sql` for test data fixtures.
+
+---
+
+## Backup and Recovery
+
+- **Automated backups:** Daily at 3 AM UTC via Supabase
+- **Point-in-time recovery:** Available for Pro tier
+- **Retention:** 30 days (rolling)
+- **Manual exports:** Available via Supabase dashboard
+
+---
+
+## Performance Notes
+
+- All foreign keys have indexes
+- `transaction_date` is indexed for fast date-range queries
+- JSONB fields (`metadata`, `payload`) use GIN indexes where needed
+- Consider partitioning `audit_log` and `webhooks` tables if they grow >10M rows

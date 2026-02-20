@@ -1,0 +1,32 @@
+{
+  "name": "@bootprint/openclaw-skill",
+  "version": "0.1.0",
+  "description": "Business infrastructure for AI agents - create LLCs, open bank accounts, accept payments",
+  "main": "scripts/index.js",
+  "scripts": {
+    "test": "node scripts/test.js"
+  },
+  "keywords": [
+    "openclaw",
+    "skill",
+    "ai-agents",
+    "llc",
+    "banking",
+    "payments",
+    "business-formation"
+  ],
+  "author": "Christophe Labasky <clabasky@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clabasky/bootprint-skill.git"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "stripe": "^14.10.0",
+    "axios": "^1.6.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
