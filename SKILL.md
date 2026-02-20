@@ -174,7 +174,6 @@ If Stripe payments fail:
 
 ### Database Schema
 
-Stored in Supabase:
 - `businesses` — LLC details, formation status, EINs
 - `sponsors` — KYC data, verification status
 - `transactions` — All payments in/out

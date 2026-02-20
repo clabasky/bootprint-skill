@@ -29,7 +29,6 @@
  *   }
  */
 
-const { createClient } = require('@supabase/supabase-js');
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -52,13 +51,10 @@ if (!config['business-id']) {
 async function checkStatus() {
   const businessId = config['business-id'];
   
-  // TODO: Initialize Supabase client
-  // const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
   
   console.log(`Checking status for business: ${businessId}\n`);
   
   // TODO: Implement actual status check logic
-  // 1. Query Supabase for business record
   // 2. Check Delaware filing status
   // 3. Check IRS EIN status
   // 4. Check Unit.co bank account status

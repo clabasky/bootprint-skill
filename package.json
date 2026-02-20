@@ -22,7 +22,6 @@
     "url": "https://github.com/clabasky/bootprint-skill.git"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.39.0",
     "stripe": "^14.10.0",
     "axios": "^1.6.5"
   },

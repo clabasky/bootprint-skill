@@ -19,7 +19,6 @@
  *   }
  */
 
-const { createClient } = require('@supabase/supabase-js');
 const Stripe = require('stripe');
 
 // Parse command line arguments
@@ -53,8 +52,6 @@ async function generateInvoice() {
   const description = config.description;
   const customerEmail = config['customer-email'];
   
-  // TODO: Initialize Supabase and Stripe clients
-  // const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
   // const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
   
   console.log('Generating invoice...');
@@ -68,7 +65,6 @@ async function generateInvoice() {
   // 2. Get business Stripe account ID
   // 3. Create or retrieve Stripe customer
   // 4. Create Stripe invoice
-  // 5. Store invoice in Supabase
   // 6. Return payment URL
   
   // Placeholder response

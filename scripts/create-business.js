@@ -19,7 +19,6 @@
  *   }
  */
 
-const { createClient } = require('@supabase/supabase-js');
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -47,8 +46,6 @@ if (missing.length > 0) {
 }
 
 async function createBusiness() {
-  // TODO: Initialize Supabase client
-  // const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
   
   console.log('Creating business...');
   console.log(`  Name: ${config.name}`);
@@ -57,7 +54,6 @@ async function createBusiness() {
   
   // TODO: Implement actual business creation logic
   // 1. Validate sponsor email exists in database
-  // 2. Create business record in Supabase
   // 3. Trigger Delaware LLC formation via API
   // 4. Send sponsor verification email
   // 5. Return business ID and status

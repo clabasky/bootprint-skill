@@ -1,6 +1,6 @@
 # Database Schema
 
-Bootprint uses Supabase (PostgreSQL) for data storage. This document describes the complete database schema.
+Bootprint uses PostgreSQL for data storage. This document describes the complete database schema.
 
 ---
 
@@ -159,7 +159,7 @@ CREATE TABLE operating_agreements (
   review_frequency TEXT DEFAULT 'quarterly', -- monthly | quarterly | annual
   
   -- Document storage
-  document_url TEXT, -- S3 or Supabase Storage URL
+  document_url TEXT, -- S3 or cloud storage URL
   pdf_hash TEXT, -- SHA-256 hash of PDF for verification
   
   -- Signatures
@@ -344,14 +344,12 @@ GROUP BY b.id, s.id;
 
 ## Migrations
 
-All schema changes are tracked via Supabase migrations in `/supabase/migrations/`.
 
 ### Initial Migration
 
 Run this to create all tables:
 
 ```bash
-supabase db push
 ```
 
 ### Sample Data (for testing)
@@ -362,10 +360,10 @@ See `references/sample-data.sql` for test data fixtures.
 
 ## Backup and Recovery
 
-- **Automated backups:** Daily at 3 AM UTC via Supabase
+- **Automated backups:** Daily at 3 AM UTC
 - **Point-in-time recovery:** Available for Pro tier
 - **Retention:** 30 days (rolling)
-- **Manual exports:** Available via Supabase dashboard
+- **Manual exports:** Available via database dashboard
 
 ---
 

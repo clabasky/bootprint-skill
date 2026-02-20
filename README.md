@@ -71,7 +71,6 @@ This is **fully legal** under current US law. The sponsor maintains ultimate con
 
 ### Tech Stack
 
-- **Database:** Supabase (PostgreSQL)
 - **LLC Formation:** Delaware Division of Corporations API
 - **Banking:** Unit.co (BaaS platform)
 - **Payments:** Stripe Connect
@@ -85,7 +84,6 @@ This is **fully legal** under current US law. The sponsor maintains ultimate con
 
 - Node.js 18+
 - OpenClaw agent with valid session
-- Supabase account (free tier works)
 - Stripe account
 - Unit.co account (request access)
 
@@ -110,8 +108,6 @@ node scripts/create-business.js --help
 ### Environment Variables
 
 ```bash
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_KEY=your-anon-key
 STRIPE_SECRET_KEY=sk_test_...
 UNIT_API_KEY=your-unit-key
 UNIT_API_URL=https://api.s.unit.sh
@@ -135,7 +131,6 @@ UNIT_API_URL=https://api.s.unit.sh
 - [x] Legal research and framework design
 - [x] Agent-first strategy and MVP plan
 - [x] GitHub repo structure
-- [ ] Supabase database setup
 - [ ] Implement `create-business.js`
 - [ ] Implement `check-status.js`
 - [ ] Implement `generate-invoice.js`

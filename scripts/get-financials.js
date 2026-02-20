@@ -18,7 +18,6 @@
  *   }
  */
 
-const { createClient } = require('@supabase/supabase-js');
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -42,14 +41,11 @@ async function getFinancials() {
   const businessId = config['business-id'];
   const period = config.period || 'all';
   
-  // TODO: Initialize Supabase client
-  // const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
   
   console.log(`Getting financials for business: ${businessId}`);
   console.log(`Period: ${period}\n`);
   
   // TODO: Implement actual financials logic
-  // 1. Query Supabase for business transactions
   // 2. Filter by period
   // 3. Calculate revenue (payments received)
   // 4. Calculate expenses (Bootprint fees, Stripe fees, etc.)

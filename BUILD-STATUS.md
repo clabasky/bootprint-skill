@@ -26,7 +26,6 @@ bootprint-skill/
 │   └── get-financials.js       ✅ Scaffolded (needs implementation)
 ├── references/
 │   ├── operating-agreement-template.md  ✅ Complete
-│   └── schema.md               ✅ Complete (Supabase schema)
 └── assets/                     ⏳ Empty (for future templates)
 ```
 
@@ -56,7 +55,6 @@ bootprint-skill/
    - Legal validity explanation
 
 4. **Database Schema** (9.6 KB)
-   - Complete PostgreSQL schema for Supabase
    - All tables: businesses, sponsors, transactions, invoices, etc.
    - Row-level security policies
    - Indexes for performance
@@ -87,15 +85,12 @@ All 4 core CLI scripts have:
 ### Friday, Feb 20
 
 - [ ] Unit.co signup (you'll do this)
-- [ ] Supabase project setup (weekend)
 - [ ] Confirm Stripe Connect setup
 - [ ] Reach out to 5 beta testers (10 candidates identified)
 - [ ] Draft personalized outreach emails
 
 ### Weekend (Feb 21-22)
 
-- [ ] Supabase: Create project and run schema
-- [ ] Implement Supabase client in scripts
 - [ ] Test database connection
 - [ ] Begin implementing `create-business.js` logic
 
@@ -106,14 +101,12 @@ All 4 core CLI scripts have:
 ### Scripts to Implement (Week 2)
 
 **create-business.js**
-- [ ] Supabase: Create business record
 - [ ] Validate sponsor exists or create new sponsor
 - [ ] Trigger Delaware LLC formation (API or doola)
 - [ ] Send sponsor verification email
 - [ ] Return business ID + status
 
 **check-status.js**
-- [ ] Query Supabase for business
 - [ ] Check Delaware filing status
 - [ ] Check IRS EIN status
 - [ ] Check Unit.co account status
@@ -124,7 +117,6 @@ All 4 core CLI scripts have:
 - [ ] Get Stripe account ID for business
 - [ ] Create/retrieve Stripe customer
 - [ ] Create Stripe invoice
-- [ ] Store in Supabase transactions table
 - [ ] Return payment URL
 
 **get-financials.js**
@@ -136,7 +128,6 @@ All 4 core CLI scripts have:
 
 ### Integrations to Build (Week 2-3)
 
-**Supabase**
 - [ ] Initialize client
 - [ ] Implement auth (OpenClaw session tokens)
 - [ ] Test CRUD operations
@@ -178,7 +169,6 @@ All 4 core CLI scripts have:
 | GitHub repo created & pushed | ✅ Done (Feb 19) |
 | Outreach script | ⏳ TODO (Feb 20) |
 | Send beta tester emails | ⏳ TODO (Feb 20) |
-| Supabase setup | ⏳ TODO (Weekend) |
 | Skill architecture | ✅ Done (Feb 19) |
 
 **Progress:** 6 / 8 goals complete (75%)
@@ -196,7 +186,6 @@ Initial commit included:
 - README with quick start and beta tester info
 - 4 CLI scripts scaffolded (create-business, check-status, generate-invoice, get-financials)
 - Operating agreement template (Delaware LLC with AI delegation)
-- Complete database schema for Supabase
 - Package.json with dependencies
 - MIT license
 
@@ -206,7 +195,6 @@ Initial commit included:
 
 1. **Skill-first approach** — OpenClaw skill is primary distribution, not web app
 2. **Scripts over SDK** — Simple CLI scripts that agents can call directly
-3. **Supabase for data** — Fast setup, RLS policies, good for MVP
 4. **Unit.co for banking** — Programmatic account creation at scale
 5. **Stripe Connect Express** — Easiest path for agent payment acceptance
 6. **Delaware LLC standard** — Wyoming DAO LLC deferred to Phase 2
@@ -260,12 +248,10 @@ Initial commit included:
 
 1. ✅ **Git + GitHub** — DONE! Repo at https://github.com/clabasky/bootprint-skill
 2. **Beta tester outreach** — Draft and send personalized emails to 10 candidates
-3. **Supabase setup** — Create project, run schema (weekend)
 4. **Unit.co signup** — In progress
 
 **After that (Week 2):**
 
-5. Implement Supabase client in scripts
 6. Build `create-business.js` with real API calls
 7. Set up Stripe Connect test account
 8. Begin Unit.co integration
