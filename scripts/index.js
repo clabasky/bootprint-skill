@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 /**
- * Bootprint CLI - Main entrypoint
+ * Clawprint CLI - Main entrypoint
  * 
  * Usage:
- *   bootprint <command> [options]
+ *   clawprint <command> [options]
  * 
  * Commands:
  *   create-business    Create a new agent-operated business
@@ -27,10 +27,10 @@ const commands = {
 
 function showHelp() {
   console.log(`
-Bootprint CLI - Business infrastructure for AI agents
+Clawprint CLI - Business infrastructure for AI agents
 
 Usage:
-  bootprint <command> [options]
+  clawprint <command> [options]
 
 Commands:
   create-business    Create a new agent-operated business
@@ -40,14 +40,14 @@ Commands:
   help               Show this help message
 
 Examples:
-  bootprint create-business --name "Acme AI" --purpose "Software" --sponsor you@example.com
-  bootprint check-status --business-id biz_abc123
-  bootprint generate-invoice --business-id biz_abc123 --amount 1000 --customer-email client@example.com
-  bootprint get-financials --business-id biz_abc123
+  clawprint create-business --name "Acme AI" --purpose "Software" --sponsor you@example.com
+  clawprint check-status --business-id biz_abc123
+  clawprint generate-invoice --business-id biz_abc123 --amount 1000 --customer-email client@example.com
+  clawprint get-financials --business-id biz_abc123
 
 For more information:
-  https://bootprintai.com
-  https://github.com/bootprintai/openclaw-skill
+  https://clawprintai.com
+  https://github.com/clawprintai/openclaw-skill
 `);
 }
 
@@ -61,7 +61,7 @@ if (!command || command === 'help' || command === '--help' || command === '-h') 
 
 if (!commands[command]) {
   console.error(`Error: Unknown command "${command}"`);
-  console.error('Run "bootprint help" to see available commands.');
+  console.error('Run "clawprint help" to see available commands.');
   process.exit(1);
 }
 

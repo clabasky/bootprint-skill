@@ -1,5 +1,5 @@
 {
-  "name": "@bootprint/openclaw-skill",
+  "name": "@clawprint/openclaw-skill",
   "version": "0.1.0",
   "description": "Business infrastructure for AI agents - create LLCs, open bank accounts, accept payments",
   "main": "scripts/index.js",
@@ -19,7 +19,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/clabasky/bootprint-skill.git"
+    "url": "https://github.com/clabasky/clawprint-skill.git"
   },
   "dependencies": {
     "stripe": "^14.10.0",

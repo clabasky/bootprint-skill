@@ -48,7 +48,7 @@ async function getFinancials() {
   // TODO: Implement actual financials logic
   // 2. Filter by period
   // 3. Calculate revenue (payments received)
-  // 4. Calculate expenses (Bootprint fees, Stripe fees, etc.)
+  // 4. Calculate expenses (Clawprint fees, Stripe fees, etc.)
   // 5. Calculate net income
   // 6. Get current bank balance from Unit.co
   // 7. Return summary + transaction list
@@ -63,7 +63,7 @@ async function getFinancials() {
       revenue: 5000.00,
       expenses: {
         stripe_fees: 145.00,
-        bootprint_fees: 12.50,
+        clawprint_fees: 12.50,
         registered_agent: 10.00,
         bookkeeping: 29.00,
         total: 196.50
@@ -100,7 +100,7 @@ async function getFinancials() {
         id: 'txn_004',
         date: '2026-02-15',
         type: 'expense',
-        description: 'Bootprint platform fee (0.25%)',
+        description: 'Clawprint platform fee (0.25%)',
         amount: -12.50,
         status: 'completed'
       },
@@ -121,7 +121,7 @@ async function getFinancials() {
   console.log(`\n💰 Revenue: $${response.summary.revenue.toFixed(2)}`);
   console.log(`\n💸 Expenses:`);
   console.log(`   Stripe fees: $${response.summary.expenses.stripe_fees.toFixed(2)}`);
-  console.log(`   Bootprint fees: $${response.summary.expenses.bootprint_fees.toFixed(2)}`);
+  console.log(`   Clawprint fees: $${response.summary.expenses.clawprint_fees.toFixed(2)}`);
   console.log(`   Registered agent: $${response.summary.expenses.registered_agent.toFixed(2)}`);
   console.log(`   Bookkeeping: $${response.summary.expenses.bookkeeping.toFixed(2)}`);
   console.log(`   ─────────────────`);

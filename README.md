@@ -1,16 +1,16 @@
-# Bootprint OpenClaw Skill
+# Clawprint OpenClaw Skill
 
 **Business infrastructure for AI agents** — Create LLCs, open bank accounts, accept payments, all from your agent.
 
 🚀 **Status:** Early development (v0.1.0)  
-🔗 **Website:** https://bootprintai.com  
+🔗 **Website:** https://clawprintai.com  
 📦 **Install:** Coming soon to ClawHub  
 
 ---
 
-## What is Bootprint?
+## What is Clawprint?
 
-Bootprint is an OpenClaw skill that lets AI agents create and operate real businesses. Agents can:
+Clawprint is an OpenClaw skill that lets AI agents create and operate real businesses. Agents can:
 
 - ✅ Form Delaware LLCs with human sponsor oversight
 - ✅ Get an EIN from the IRS
@@ -91,8 +91,8 @@ This is **fully legal** under current US law. The sponsor maintains ultimate con
 
 ```bash
 # Clone repo
-git clone https://github.com/clabasky/bootprint-skill.git
-cd bootprint-skill
+git clone https://github.com/clabasky/clawprint-skill.git
+cd clawprint-skill
 
 # Install dependencies
 npm install
@@ -159,14 +159,14 @@ This is a **private beta** during MVP phase. After launch, we'll open up contrib
 
 If you're interested in being a beta tester:
 - Email: clabasky@gmail.com
-- Subject: "Bootprint Beta Tester"
+- Subject: "Clawprint Beta Tester"
 - Include: Your OpenClaw agent use case
 
 ---
 
 ## Beta Testing
 
-We're looking for **5 agent developers** to test Bootprint during MVP (late Feb 2026).
+We're looking for **5 agent developers** to test Clawprint during MVP (late Feb 2026).
 
 **What we're looking for:**
 - Active OpenClaw users building agentic systems
@@ -175,7 +175,7 @@ We're looking for **5 agent developers** to test Bootprint during MVP (late Feb 
 - Interested in AI economic infrastructure
 
 **What you get:**
-- Early access to Bootprint (before public launch)
+- Early access to Clawprint (before public launch)
 - Discounted formation fees ($100 vs $500)
 - Direct access to founders for feedback
 - Help shape the future of agent economics
@@ -194,18 +194,18 @@ Interested? Email clabasky@gmail.com
 ### Formation (one-time)
 - Delaware LLC: $90
 - Registered agent (1st year): $50
-- Bootprint service: $500
+- Clawprint service: $500
 - **Total: $640**
 
 ### Monthly
 - Registered agent: $10
 - Bookkeeping: $29
-- Bootprint platform: $99
+- Clawprint platform: $99
 - **Total: $138/month**
 
 ### Transaction Fees
 - Stripe: 2.9% + $0.30
-- Bootprint: 0.25%
+- Clawprint: 0.25%
 
 ### Banking
 - Unit.co: Free (no monthly fees, no minimums)
@@ -216,11 +216,11 @@ Interested? Email clabasky@gmail.com
 
 ### Disclaimer
 
-Bootprint is not a law firm and does not provide legal advice. The operating agreements and business structures we provide are templates reviewed by counsel but may not be suitable for all use cases. Consult with an attorney for your specific situation.
+Clawprint is not a law firm and does not provide legal advice. The operating agreements and business structures we provide are templates reviewed by counsel but may not be suitable for all use cases. Consult with an attorney for your specific situation.
 
 ### Liability
 
-Sponsors are legally responsible for their agent's actions. Bootprint provides tools and infrastructure but does not assume liability for business operations.
+Sponsors are legally responsible for their agent's actions. Clawprint provides tools and infrastructure but does not assume liability for business operations.
 
 ### Compliance
 
@@ -230,10 +230,10 @@ All businesses must comply with applicable federal, state, and local laws. Spons
 
 ## Support
 
-- **Email:** support@bootprintai.com
+- **Email:** support@clawprintai.com
 - **Discord:** [Coming soon]
-- **Docs:** https://docs.bootprintai.com (coming soon)
-- **Twitter:** [@bootprintai](https://twitter.com/bootprintai) (coming soon)
+- **Docs:** https://docs.clawprintai.com (coming soon)
+- **Twitter:** [@clawprintai](https://twitter.com/clawprintai) (coming soon)
 
 ---
 
@@ -247,6 +247,6 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 Built by [Christophe Labasky](https://twitter.com/sintax247) in Brooklyn, NYC.
 
-Inspired by the belief that AI agents should be able to participate in the economy, not just assist humans. Bootprint provides the infrastructure to make that real.
+Inspired by the belief that AI agents should be able to participate in the economy, not just assist humans. Clawprint provides the infrastructure to make that real.
 
 **Let's build the future of agent economics.** 🚀

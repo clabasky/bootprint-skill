@@ -1,11 +1,11 @@
 ---
-name: bootprint
+name: clawprint
 description: Create and operate sponsored business entities (LLCs) for AI agents. Use when an agent needs to: (1) Form a legal business entity, (2) Open a bank account, (3) Accept payments or generate invoices, (4) Track business financials, (5) Operate as an independent economic agent with human sponsor oversight.
 ---
 
-# Bootprint — Business Infrastructure for AI Agents
+# Clawprint — Business Infrastructure for AI Agents
 
-Bootprint enables AI agents to create and operate real businesses with human sponsor oversight. Agents can form LLCs, open bank accounts, accept payments, and track financials—all through simple commands.
+Clawprint enables AI agents to create and operate real businesses with human sponsor oversight. Agents can form LLCs, open bank accounts, accept payments, and track financials—all through simple commands.
 
 ## Quick Start
 
@@ -67,10 +67,10 @@ This model is fully legal under existing law. The sponsor maintains ultimate con
 ### Formation Process
 
 1. Agent calls `create-business.js` with business details
-2. Bootprint files LLC with Delaware Division of Corporations
+2. Clawprint files LLC with Delaware Division of Corporations
 3. Sponsor receives verification email (one-time KYC via Stripe)
-4. Bootprint applies for EIN from IRS (1-5 business days)
-5. Bootprint opens bank account via Unit.co (2-5 business days)
+4. Clawprint applies for EIN from IRS (1-5 business days)
+5. Clawprint opens bank account via Unit.co (2-5 business days)
 6. Business is active and ready to transact
 
 Total timeline: **3-10 business days** from formation to first payment.
@@ -125,7 +125,7 @@ Not yet supported:
 
 ### Operating Agreement Templates
 
-See `references/operating-agreement-template.md` for the standard Delaware LLC operating agreement used by Bootprint. It includes:
+See `references/operating-agreement-template.md` for the standard Delaware LLC operating agreement used by Clawprint. It includes:
 
 - Sponsor as sole member/manager
 - Delegation of operations to AI agent
@@ -161,9 +161,9 @@ If Stripe payments fail:
 
 ### Data Flow
 
-1. **Agent → Bootprint API** (via OpenClaw session token)
-2. **Bootprint → External APIs** (Delaware, IRS, Unit.co, Stripe)
-3. **Bootprint → Sponsor Dashboard** (web interface for humans)
+1. **Agent → Clawprint API** (via OpenClaw session token)
+2. **Clawprint → External APIs** (Delaware, IRS, Unit.co, Stripe)
+3. **Clawprint → Sponsor Dashboard** (web interface for humans)
 
 ### Security
 
@@ -187,20 +187,20 @@ See `references/schema.md` for complete schema.
 - Delaware LLC filing: $90
 - Registered agent (1st year): $50
 - EIN application: Free
-- Bootprint service: $500 one-time
+- Clawprint service: $500 one-time
 
 **Total upfront: ~$640**
 
 ### Monthly Fees
 - Registered agent: $10/month
 - Bookkeeping: $29/month
-- Bootprint platform: $99/month
+- Clawprint platform: $99/month
 
 **Total monthly: ~$138**
 
 ### Transaction Fees
 - Stripe processing: 2.9% + $0.30 per transaction
-- Bootprint platform: 0.25% of revenue
+- Clawprint platform: 0.25% of revenue
 
 ### Banking
 - Unit.co accounts: Free (no monthly fees, no minimums)

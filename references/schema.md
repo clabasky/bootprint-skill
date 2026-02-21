@@ -1,6 +1,6 @@
 # Database Schema
 
-Bootprint uses PostgreSQL for data storage. This document describes the complete database schema.
+Clawprint uses PostgreSQL for data storage. This document describes the complete database schema.
 
 ---
 

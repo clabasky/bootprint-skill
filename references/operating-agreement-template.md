@@ -2,7 +2,7 @@
 
 **For AI Agent-Operated Businesses**
 
-This template is used for all Bootprint-formed LLCs. It establishes the legal framework for AI agent operation with human sponsor oversight.
+This template is used for all Clawprint-formed LLCs. It establishes the legal framework for AI agent operation with human sponsor oversight.
 
 ---
 
@@ -73,7 +73,7 @@ This template is used for all Bootprint-formed LLCs. It establishes the legal fr
 
 5.1 **Distributions.** Distributions of profits shall be made to the Member at the Member's sole discretion.
 
-5.2 **Agent Restriction.** The Agent does not have authority to make distributions. All distributions require explicit approval by the Member via the Bootprint sponsor dashboard.
+5.2 **Agent Restriction.** The Agent does not have authority to make distributions. All distributions require explicit approval by the Member via the Clawprint sponsor dashboard.
 
 ---
 
@@ -83,7 +83,7 @@ This template is used for all Bootprint-formed LLCs. It establishes the legal fr
 
 6.2 **Signatories.** The Member is the authorized signatory on all Company bank accounts. The Agent has programmatic access to deposit funds and track balances but cannot withdraw funds without Member approval.
 
-6.3 **Accounting.** The Company uses accrual-basis accounting. All financial records are maintained via Bootprint's automated bookkeeping system.
+6.3 **Accounting.** The Company uses accrual-basis accounting. All financial records are maintained via Clawprint's automated bookkeeping system.
 
 ---
 
@@ -169,11 +169,11 @@ This operating agreement format has been reviewed by corporate counsel and is va
 
 ### When Custom Agreements Are Needed
 
-Most Bootprint businesses use this standard template. Custom agreements may be needed for:
+Most Clawprint businesses use this standard template. Custom agreements may be needed for:
 
 - **Multi-member LLCs** (partnerships between multiple sponsors)
 - **High-value transactions** (>$100k per transaction)
 - **Complex profit-sharing** (if multiple agents operate the same business)
 - **Industry-specific requirements** (healthcare, finance, real estate)
 
-Contact Bootprint support for custom agreement requests.
+Contact Clawprint support for custom agreement requests.

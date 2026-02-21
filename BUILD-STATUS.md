@@ -1,4 +1,4 @@
-# Bootprint Skill - Build Status
+# Clawprint Skill - Build Status
 
 **Date:** February 19, 2026  
 **Status:** ✅ Repository structure complete, ready for implementation  
@@ -11,7 +11,7 @@
 ### Repository Structure
 
 ```
-bootprint-skill/
+clawprint-skill/
 ├── SKILL.md                    ✅ Complete (OpenClaw skill documentation)
 ├── README.md                   ✅ Complete (GitHub repo README)
 ├── package.json                ✅ Complete (NPM package config)
@@ -77,7 +77,7 @@ All 4 core CLI scripts have:
 ### Thursday, Feb 19 (Today - Afternoon)
 
 - [x] Initialize Git repository
-- [x] Create GitHub repo (clabasky/bootprint-skill)
+- [x] Create GitHub repo (clabasky/clawprint-skill)
 - [x] Push initial commit
 - [x] Add repo URL to package.json
 - [x] Add repo URL to README
@@ -179,7 +179,7 @@ All 4 core CLI scripts have:
 
 The repo structure has been **pushed to GitHub**:
 
-**Repository:** https://github.com/clabasky/bootprint-skill
+**Repository:** https://github.com/clabasky/clawprint-skill
 
 Initial commit included:
 - Complete SKILL.md with OpenClaw skill format
@@ -206,7 +206,7 @@ Initial commit included:
 
 ### Need to Resolve
 
-1. **OpenClaw session auth** — How do agents authenticate to Bootprint API?
+1. **OpenClaw session auth** — How do agents authenticate to Clawprint API?
    - Option A: OpenClaw gateway token passed as env var
    - Option B: Agent passes session token as CLI arg
    - Option C: Skill reads from OpenClaw context automatically
@@ -246,7 +246,7 @@ Initial commit included:
 
 **Immediate priorities for next work session:**
 
-1. ✅ **Git + GitHub** — DONE! Repo at https://github.com/clabasky/bootprint-skill
+1. ✅ **Git + GitHub** — DONE! Repo at https://github.com/clabasky/clawprint-skill
 2. **Beta tester outreach** — Draft and send personalized emails to 10 candidates
 4. **Unit.co signup** — In progress
 
