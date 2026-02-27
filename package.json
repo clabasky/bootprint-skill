@@ -2,11 +2,8 @@
   "name": "@clawprint/openclaw-skill",
   "version": "0.1.0",
   "description": "Business infrastructure for AI agents - create LLCs, open bank accounts, accept payments",
-  "main": "scripts/index.js",
   "scripts": {
-    "test": "node scripts/test.js",
-    "test:auth": "node scripts/test-auth.js",
-    "test:all": "bash scripts/run-all-tests.sh"
+    "test:auth": "node scripts/test-auth.js"
   },
   "keywords": [
     "openclaw",
