@@ -4,20 +4,13 @@
  * Get financial summary for a business
  * 
  * Usage:
- *   node get-financials.js --business-id biz_abc123 [--period month|quarter|year|all]
+ *   node get-financials.js --business-id biz_abc123 [--period week|month|year|all]
  * 
  * Returns:
- *   {
- *     "business_id": "biz_abc123",
- *     "period": "month",
- *     "revenue": 5000.00,
- *     "expenses": 150.00,
- *     "net": 4850.00,
- *     "balance": 4850.00,
- *     "transactions": [...]
- *   }
+ *   Financial summary with balance, revenue, expenses, and recent transactions
  */
 
+const api = require('../lib/api-client');
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -33,113 +26,103 @@ for (let i = 0; i < args.length; i += 2) {
 if (!config['business-id']) {
   console.error('Error: Missing required argument: --business-id');
   console.error('\nUsage:');
-  console.error('  node get-financials.js --business-id biz_abc123 [--period month|quarter|year|all]');
+  console.error('  node get-financials.js --business-id biz_abc123 [--period week|month|year|all]');
+  console.error('\nPeriod options:');
+  console.error('  week  - Last 7 days');
+  console.error('  month - Last 30 days');
+  console.error('  year  - Last 365 days');
+  console.error('  all   - All time (default)');
   process.exit(1);
+}
+
+function formatCurrency(amount) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(amount);
+}
+
+function formatDate(dateString) {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
 }
 
 async function getFinancials() {
   const businessId = config['business-id'];
-  const period = config.period || 'all';
+  const period = config['period'] || 'all';
   
-  
-  console.log(`Getting financials for business: ${businessId}`);
-  console.log(`Period: ${period}\n`);
-  
-  // TODO: Implement actual financials logic
-  // 2. Filter by period
-  // 3. Calculate revenue (payments received)
-  // 4. Calculate expenses (Clawprint fees, Stripe fees, etc.)
-  // 5. Calculate net income
-  // 6. Get current bank balance from Unit.co
-  // 7. Return summary + transaction list
-  
-  // Placeholder response
-  const response = {
-    business_id: businessId,
-    period: period,
-    period_start: '2026-02-01',
-    period_end: '2026-02-19',
-    summary: {
-      revenue: 5000.00,
-      expenses: {
-        stripe_fees: 145.00,
-        clawprint_fees: 12.50,
-        registered_agent: 10.00,
-        bookkeeping: 29.00,
-        total: 196.50
-      },
-      net_income: 4803.50,
-      current_balance: 4803.50
-    },
-    transactions: [
-      {
-        id: 'txn_001',
-        date: '2026-02-18',
-        type: 'income',
-        description: 'Invoice payment - Client A',
-        amount: 2000.00,
-        status: 'completed'
-      },
-      {
-        id: 'txn_002',
-        date: '2026-02-17',
-        type: 'income',
-        description: 'Invoice payment - Client B',
-        amount: 3000.00,
-        status: 'completed'
-      },
-      {
-        id: 'txn_003',
-        date: '2026-02-15',
-        type: 'expense',
-        description: 'Stripe processing fees',
-        amount: -145.00,
-        status: 'completed'
-      },
-      {
-        id: 'txn_004',
-        date: '2026-02-15',
-        type: 'expense',
-        description: 'Clawprint platform fee (0.25%)',
-        amount: -12.50,
-        status: 'completed'
-      },
-      {
-        id: 'txn_005',
-        date: '2026-02-01',
-        type: 'expense',
-        description: 'Monthly fees (registered agent + bookkeeping)',
-        amount: -39.00,
-        status: 'completed'
+  try {
+    console.log(`Fetching financials for business: ${businessId}`);
+    console.log(`Period: ${period}\n`);
+    
+    // Get financial summary from API
+    const financials = await api.businesses.getFinancials(businessId, period);
+    
+    console.log('💰 Financial Summary');
+    console.log('═'.repeat(70));
+    console.log(`\n🏢 Business: ${financials.legal_name}`);
+    console.log(`   ID: ${financials.business_id}`);
+    console.log(`   Period: ${financials.period}`);
+    
+    console.log(`\n💵 Account Balance`);
+    console.log(`   Current:   ${formatCurrency(financials.balance.current)}`);
+    console.log(`   Available: ${formatCurrency(financials.balance.available)}`);
+    console.log(`   Pending:   ${formatCurrency(financials.balance.pending)}`);
+    
+    console.log(`\n📈 Revenue`);
+    console.log(`   Total:        ${formatCurrency(financials.revenue.total)}`);
+    console.log(`   Transactions: ${financials.revenue.count}`);
+    
+    console.log(`\n📉 Expenses`);
+    console.log(`   Total:        ${formatCurrency(financials.expenses.total)}`);
+    console.log(`   Transactions: ${financials.expenses.count}`);
+    
+    console.log(`\n💎 Net Income`);
+    const netColor = financials.net_income >= 0 ? '✅' : '❌';
+    console.log(`   ${netColor} ${formatCurrency(financials.net_income)}`);
+    
+    if (financials.transactions.length > 0) {
+      console.log(`\n📋 Recent Transactions (${financials.transactions.length})`);
+      console.log('─'.repeat(70));
+      
+      financials.transactions.slice(0, 10).forEach((tx, i) => {
+        const sign = tx.type === 'credit' ? '+' : '-';
+        const emoji = tx.type === 'credit' ? '💵' : '💸';
+        console.log(`${emoji} ${formatDate(tx.date)} | ${sign}${formatCurrency(tx.amount)} | ${tx.description || 'No description'}`);
+      });
+      
+      if (financials.transactions.length > 10) {
+        console.log(`   ... and ${financials.transactions.length - 10} more`);
       }
-    ]
-  };
-  
-  console.log('📊 Financial Summary');
-  console.log('─'.repeat(50));
-  console.log(`Period: ${response.period_start} to ${response.period_end}`);
-  console.log(`\n💰 Revenue: $${response.summary.revenue.toFixed(2)}`);
-  console.log(`\n💸 Expenses:`);
-  console.log(`   Stripe fees: $${response.summary.expenses.stripe_fees.toFixed(2)}`);
-  console.log(`   Clawprint fees: $${response.summary.expenses.clawprint_fees.toFixed(2)}`);
-  console.log(`   Registered agent: $${response.summary.expenses.registered_agent.toFixed(2)}`);
-  console.log(`   Bookkeeping: $${response.summary.expenses.bookkeeping.toFixed(2)}`);
-  console.log(`   ─────────────────`);
-  console.log(`   Total: $${response.summary.expenses.total.toFixed(2)}`);
-  console.log(`\n📈 Net Income: $${response.summary.net_income.toFixed(2)}`);
-  console.log(`\n🏦 Current Balance: $${response.summary.current_balance.toFixed(2)}`);
-  console.log('─'.repeat(50));
-  console.log(`\nRecent Transactions: ${response.transactions.length}`);
-  
-  console.log('\n' + JSON.stringify(response, null, 2));
-  
-  return response;
+    } else {
+      console.log(`\n📋 No transactions yet for this period`);
+    }
+    
+    console.log('\n' + '═'.repeat(70));
+    
+    console.log('\n📄 Full JSON Response:');
+    console.log(JSON.stringify(financials, null, 2));
+    
+    return financials;
+  } catch (error) {
+    console.error('\n❌ Error fetching financials:', error.message);
+    if (error.statusCode === 404) {
+      console.error('Business not found. Check the business ID and try again.');
+    } else if (error.statusCode === 400) {
+      console.error('Invalid period. Must be one of: week, month, year, all');
+    } else if (error.response) {
+      console.error('Details:', error.response);
+    }
+    throw error;
+  }
 }
 
 // Run
 getFinancials()
   .then(() => process.exit(0))
   .catch(err => {
-    console.error('❌ Error getting financials:', err.message);
     process.exit(1);
   });

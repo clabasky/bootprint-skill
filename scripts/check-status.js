@@ -29,6 +29,7 @@
  *   }
  */
 
+const api = require('../lib/api-client');
 
 // Parse command line arguments
 const args = process.argv.slice(2);
@@ -48,76 +49,109 @@ if (!config['business-id']) {
   process.exit(1);
 }
 
+const STATUS_EMOJI = {
+  pending: '⏳',
+  forming: '🔨',
+  active: '✅',
+  suspended: '⚠️',
+  dissolved: '❌',
+  filed: '✅',
+  rejected: '❌',
+  assigned: '✅',
+  failed: '❌',
+  closed: '🔒',
+};
+
+function getStatusEmoji(status) {
+  return STATUS_EMOJI[status] || '❓';
+}
+
 async function checkStatus() {
   const businessId = config['business-id'];
   
-  
-  console.log(`Checking status for business: ${businessId}\n`);
-  
-  // TODO: Implement actual status check logic
-  // 2. Check Delaware filing status
-  // 3. Check IRS EIN status
-  // 4. Check Unit.co bank account status
-  // 5. Return consolidated status
-  
-  // Placeholder response
-  const response = {
-    business_id: businessId,
-    name: 'Acme AI Services',
-    status: 'forming', // forming | active | suspended
-    created_at: '2026-02-19T10:30:00Z',
-    llc: {
-      status: 'filed', // pending | filed | rejected
-      state: 'Delaware',
-      file_number: '1234567',
-      filed_date: '2026-02-18'
-    },
-    ein: {
-      status: 'pending', // pending | assigned | failed
-      estimated_date: '2026-02-25'
-    },
-    bank_account: {
-      status: 'pending', // pending | active | rejected
-      provider: 'Unit.co',
-      estimated_date: '2026-02-26'
-    },
-    sponsor: {
-      email: 'clabasky@gmail.com',
-      verification_status: 'verified' // pending | verified | failed
+  try {
+    console.log(`Fetching status for business: ${businessId}\n`);
+    
+    // Get detailed status from API
+    const status = await api.businesses.getStatus(businessId);
+    
+    console.log('📊 Business Formation Status');
+    console.log('═'.repeat(60));
+    console.log(`\n🏢 Business: ${status.legal_name}`);
+    console.log(`   ID: ${status.business_id}`);
+    console.log(`   Overall Status: ${getStatusEmoji(status.status)} ${status.status.toUpperCase()}`);
+    console.log(`   Created: ${new Date(status.created_at).toLocaleDateString()}`);
+    
+    console.log(`\n📄 LLC Formation (${status.llc.state})`);
+    console.log(`   Status: ${getStatusEmoji(status.llc.status)} ${status.llc.status}`);
+    if (status.llc.file_number) {
+      console.log(`   File #: ${status.llc.file_number}`);
+      console.log(`   Filed: ${new Date(status.llc.filed_date).toLocaleDateString()}`);
     }
-  };
-  
-  console.log('📊 Business Status');
-  console.log('─'.repeat(50));
-  console.log(`Overall: ${response.status.toUpperCase()}`);
-  console.log(`\n📄 LLC Formation: ${response.llc.status}`);
-  if (response.llc.file_number) {
-    console.log(`   File #: ${response.llc.file_number}`);
-    console.log(`   Filed: ${response.llc.filed_date}`);
+    
+    console.log(`\n🏦 EIN (Employer ID Number)`);
+    console.log(`   Status: ${getStatusEmoji(status.ein.status)} ${status.ein.status}`);
+    if (status.ein.number) {
+      console.log(`   Number: ${status.ein.number}`);
+      console.log(`   Assigned: ${new Date(status.ein.assigned_date).toLocaleDateString()}`);
+    }
+    
+    console.log(`\n💰 Bank Account`);
+    console.log(`   Status: ${getStatusEmoji(status.bank_account.status)} ${status.bank_account.status}`);
+    if (status.bank_account.provider) {
+      console.log(`   Provider: ${status.bank_account.provider}`);
+      console.log(`   Routing: ${status.bank_account.routing}`);
+      console.log(`   Account: ****${status.bank_account.account_last4}`);
+      console.log(`   Opened: ${new Date(status.bank_account.opened_date).toLocaleDateString()}`);
+    }
+    
+    console.log(`\n👤 Sponsor`);
+    console.log(`   Email: ${status.sponsor.email}`);
+    console.log(`   Verified: ${status.sponsor.verified ? '✅ Yes' : '⏳ Pending'}`);
+    if (status.sponsor.verified_at) {
+      console.log(`   Verified: ${new Date(status.sponsor.verified_at).toLocaleDateString()}`);
+    }
+    
+    console.log('\n' + '═'.repeat(60));
+    
+    // Show next steps based on status
+    if (status.status === 'pending' || status.status === 'forming') {
+      console.log('\n📋 Next Steps:');
+      if (!status.sponsor.verified) {
+        console.log('  • Sponsor needs to complete identity verification');
+      }
+      if (status.llc.status === 'pending') {
+        console.log('  • Waiting for Delaware LLC formation (1-3 business days)');
+      }
+      if (status.ein.status === 'pending') {
+        console.log('  • Waiting for IRS EIN assignment (3-5 business days)');
+      }
+      if (status.bank_account.status === 'pending') {
+        console.log('  • Waiting for bank account setup (2-5 business days)');
+      }
+    } else if (status.status === 'active') {
+      console.log('\n✅ Business is fully active and ready to operate!');
+      console.log(`   Check financials: node get-financials.js --business-id ${businessId}`);
+    }
+    
+    console.log('\n📄 Full JSON Response:');
+    console.log(JSON.stringify(status, null, 2));
+    
+    return status;
+  } catch (error) {
+    console.error('\n❌ Error checking status:', error.message);
+    if (error.statusCode === 404) {
+      console.error('Business not found. Check the business ID and try again.');
+    } else if (error.response) {
+      console.error('Details:', error.response);
+    }
+    throw error;
   }
-  
-  console.log(`\n🏦 EIN: ${response.ein.status}`);
-  if (response.ein.estimated_date) {
-    console.log(`   Expected: ${response.ein.estimated_date}`);
-  }
-  
-  console.log(`\n💰 Bank Account: ${response.bank_account.status}`);
-  if (response.bank_account.estimated_date) {
-    console.log(`   Expected: ${response.bank_account.estimated_date}`);
-  }
-  
-  console.log(`\n👤 Sponsor: ${response.sponsor.verification_status}`);
-  console.log('─'.repeat(50));
-  
-  console.log('\n' + JSON.stringify(response, null, 2));
-  
-  return response;
 }
 
 // Run
 checkStatus()
   .then(() => process.exit(0))
   .catch(err => {
-    console.error('❌ Error checking status:', err.message);
     process.exit(1);
   });
