@@ -107,11 +107,7 @@ node scripts/setup-agent.js --email agent2@example.com
 
 ### "API is not running"
 
-```bash
-# Start API in another terminal
-cd clawprint-app
-npm run dev
-```
+Ensure the Clawprint API is running on `http://localhost:3000/api` in another terminal. Contact support if you don't have the API server running.
 
 ### "API key not found"
 

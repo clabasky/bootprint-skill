@@ -50,14 +50,6 @@ Expected: `✅ All tests passed!`
 
 ---
 
-## 📖 Documentation
-
-- **SETUP.md** — Getting started & authentication
-- **REFERENCE.md** — API endpoints & commands
-- **SKILL.md** — Full skill documentation
-
----
-
 ## 🎯 Core Scripts
 
 | Command | Purpose |
@@ -89,7 +81,7 @@ Register once, use everywhere.
 ## 📦 Requirements
 
 - Node.js 18+
-- Clawprint API running (`clawprint-app`)
+- Clawprint API running on `http://localhost:3000/api`
 - Valid email for agent registration
 
 ---
@@ -107,9 +99,9 @@ Register once, use everywhere.
 ## 📚 Full Docs
 
 For complete documentation, see:
-- Backend: `../clawprint-app/docs/`
-- Database: `../clawprint-app/docs/DATABASE_SCHEMA.md`
-- API Auth: `../clawprint-app/docs/AUTHENTICATION.md`
+- **SETUP.md** — Getting started & authentication
+- **REFERENCE.md** — API endpoints & commands
+- **SKILL.md** — Full skill documentation
 
 ---
 

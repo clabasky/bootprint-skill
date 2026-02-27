@@ -196,7 +196,7 @@ X-RateLimit-Reset: 1708114800
 
 - **SETUP.md** — Getting started
 - **README.md** — Overview & features
-- **../clawprint-app/docs/AUTHENTICATION.md** — Detailed auth guide
+- **SKILL.md** — Complete skill documentation
 
 ---
 
